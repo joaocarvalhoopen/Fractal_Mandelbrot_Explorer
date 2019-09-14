@@ -61,7 +61,7 @@ void get_zoom_in( vector<vector<double>> &vec,
 
 void draw_mandelbrot(SDL_Renderer* renderer,                    // The renderer to draw the image pointer.
                      SDL_Texture* texture,                      // Texture pointer.
-                     vector<unsigned char> pixels,              // Pixels texture buffer.
+                     vector<unsigned char> &pixels,             // Pixels texture buffer.
                      const double cx_min, const double cx_max,  // The rectangle in the complex plane.
                      const double cy_min, const double cy_max ){
     const size_t x_max = WINDOW_WIDTH;
@@ -78,7 +78,9 @@ void draw_mandelbrot(SDL_Renderer* renderer,                    // The renderer 
             int iter;
             for (iter = 0; iter < MAX_MANDELBROT_ITERATIONS; ++iter){ 
                 z = z*z + c;
-                if (abs(z) > 2.0)
+                // if (abs(z) > 2.0)
+                // Optimization. Taking out the sqrt().
+                if (z.real() * z.real() + z.imag() * z.imag() > 2.0 * 2)
                     break;
             }
             const unsigned int offset = ( texWidth * 4 * y ) + x * 4;
